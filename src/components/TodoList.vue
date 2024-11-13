@@ -2,13 +2,11 @@
   <div>
     <h2 class="title">Todo List</h2>
     
-    <!-- Фильтрация по дате и названию -->
     <div class="filters">
       <input v-model="filter.title" type="text" placeholder="Search by title" />
       <input v-model="filter.createdDate" type="date" placeholder="Filter by date" />
     </div>
 
-    <!-- Группировка по статусам -->
     <div class="todo-group">
       <div class="group" v-for="status in ['true', 'false']" :key="status">
         <h3>{{ status === 'true' ? 'Completed' : 'Pending' }}</h3>
@@ -24,7 +22,6 @@
 
     <p v-if="todos.length === 0">No todos found.</p>
 
-    <!-- Add/Edit Todo Form -->
     <h3>{{ editMode ? 'Edit Todo' : 'Add a New Todo' }}</h3>
     <form @submit.prevent="editMode ? updateTodo() : addTodo()">
       <div>
@@ -61,7 +58,7 @@ export default {
         createdDate: '',
         status: false,
       },
-      editMode: false, // Tracks whether we're editing an existing todo
+      editMode: false, 
     };
   },
   computed: {
@@ -93,8 +90,8 @@ export default {
           createdDate: this.newTodo.createdDate,
           status: this.newTodo.status
         });
-        this.todos.push(response.data); // Add the new todo to the list
-        this.resetForm(); // Reset the form
+        this.todos.push(response.data); 
+        this.resetForm(); 
       } catch (error) {
         console.error('Error adding todo:', error);
       }
@@ -107,8 +104,8 @@ export default {
           status: this.newTodo.status
         });
         const index = this.todos.findIndex(todo => todo.id === this.newTodo.id);
-        this.todos[index] = response.data; // Update the todo in the list
-        this.resetForm(); // Reset the form
+        this.todos[index] = response.data; 
+        this.resetForm(); 
       } catch (error) {
         console.error('Error updating todo:', error);
       }
@@ -116,18 +113,18 @@ export default {
     async deleteTodo(id) {
       try {
         await axios.delete(`http://localhost:8080/api/todos/${id}`);
-        this.todos = this.todos.filter(todo => todo.id !== id); // Remove the deleted todo from the list
+        this.todos = this.todos.filter(todo => todo.id !== id); 
       } catch (error) {
         console.error('Error deleting todo:', error);
       }
     },
     editTodo(todo) {
-      this.newTodo = { ...todo }; // Copy the todo to the form for editing
-      this.editMode = true; // Set edit mode to true
+      this.newTodo = { ...todo }; 
+      this.editMode = true; 
     },
     resetForm() {
       this.newTodo = { id: null, title: '', createdDate: '', status: false };
-      this.editMode = false; // Reset to add mode
+      this.editMode = false; 
     }
   },
   mounted() {
